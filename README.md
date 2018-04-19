@@ -9,7 +9,8 @@
 
 [Yifu Luo](https://github.com/443582555)
 
-## [Install Go](https://golang.org/doc/install?download=go1.10.1.darwin-amd64.pkg#install) 
+## Install 
+[https://golang.org/doc/install?download=go1.10.1.darwin-amd64.pkg#install](https://golang.org/doc/install?download=go1.10.1.darwin-amd64.pkg#install) 
 
 
 ## Code organization 
@@ -17,9 +18,8 @@ Overview:
 - Go code are keeped in a single *workspace*
 - A workspace contains many version control *repositories* (managed by Git, like this repository)
 - Each repository contains one or more *packages*
-- Each package consist of one or more Go source files in a single directory.\
+- Each package consist of one or more Go source files in a single directory.  
 
-[Reference](https://golang.org/doc/code.html#Workspaces)
 \
 An example workspace hierarchy:
 ```
@@ -48,3 +48,5 @@ src/
 	    writer.go              # package source
     ... (many more repositories and packages omitted) ...
 ```
+\
+[Reference](https://golang.org/doc/code.html#Workspaces)
