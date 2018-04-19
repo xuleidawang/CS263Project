@@ -5,9 +5,9 @@
 
 ## Team members:
 [Lei Xu](https://github.com/xuleidawang)
-![lei](https://github.com/xuleidawang/CS263Project/images/lei.jpg)
+![lei](https://raw.githubusercontent.com/xuleidawang/CS263Project/master/images/lei.jpg)
 [Yifu Luo](https://github.com/443582555)
-![yifu](https://github.com/xuleidawang/CS263Project/images/yifu.jpg)
+![yifu](https://raw.githubusercontent.com/xuleidawang/CS263Project/master/images/yifu.jpg)
 ## Install 
 [https://golang.org/doc/install?download=go1.10.1.darwin-amd64.pkg#install](https://golang.org/doc/install?download=go1.10.1.darwin-amd64.pkg#install) 
 
