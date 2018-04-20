@@ -48,11 +48,11 @@ src/
     ... (many more repositories and packages omitted) ...
 ```
 \
-Week one:
-We implemented a simple go program that run two print function concurrently. We built a funtion that print digits and one print alphabets. Using runtime.GOMAXPROCS(2), we are able to see that both function print chars concurrently and each time the print value is not the same. 
-Concept learnted:
-Any function or method in Go can be created as a goroutine. 
+Week one:  
+We implemented a simple go program that run two print function concurrently. We built a funtion that print digits and one print alphabets. Using runtime.GOMAXPROCS(2), we are able to see that both function print chars concurrently and each time the print value is not the same.   
+Concept learnted:  
+Any function or method in Go can be created as a goroutine.   
 Go runtime schedules goroutines to run within a logical processor that is bound to a single operating system thread. By default, the Go runtime allocates a single logical processor to execute all the goroutines that are created for our program(Need to explore further)
-Concurrency is not Parallelism. Parallelism is when two or more threads are executing code simultaneously against different processors. If you configure the runtime to use more than one logical processor, the scheduler will distribute goroutines between these logical processors which will result in goroutines running on different operating system threads. However, to have true parallelism you need to run your program on a machine with multiple physical processors. If not, then the goroutines will be running concurrently against a single physical processor, even though the Go runtime is using multiple logical processors.
+Concurrency is not Parallelism. Parallelism is when two or more threads are executing code simultaneously against different processors.   If you configure the runtime to use more than one logical processor, the scheduler will distribute goroutines between these logical processors which will result in goroutines running on different operating system threads. However, to have true parallelism you need to run your program on a machine with multiple physical processors. If not, then the goroutines will be running concurrently against a single physical processor, even though the Go runtime is using multiple logical processors.  
 
 [Reference](https://golang.org/doc/code.html#Workspaces)
