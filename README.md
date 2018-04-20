@@ -48,4 +48,6 @@ src/
     ... (many more repositories and packages omitted) ...
 ```
 \
+Week one:
+We implemented a simple go program that run two print function concurrently. We built a funtion that print digits and one print alphabets. Using runtime.GOMAXPROCS(2), we are able to see that both function print chars concurrently and each time the print value is not the same. 
 [Reference](https://golang.org/doc/code.html#Workspaces)
