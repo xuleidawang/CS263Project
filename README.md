@@ -1,4 +1,4 @@
-#CS263 Runtime System Project
+# CS263 Runtime System Project
 ## Topic: Investigate and empirically evaluate Go concurrency mechanism extensively.
 
 ## Project Vision
@@ -56,7 +56,15 @@ src/
 In computer science, concurrency refers to the ability of different parts or units of a program, algorithm, or problem to be executed out-of-order or in partial order, without affecting the final outcome. This allows for parallel execution of the concurrent units, which can significantly improve overall speed of the execution in multi-processor and multicore system. 
 In many other programming languages, concurrent is made difficult by the subtleties required to implement correct access to shared variables. However, Go encouraged a different approach by passing the shared variable on channels and never actively shared by separate thread of execution. Only one goroutine has access to the value at any given time. 
 
-(4) Go Routines
+(4) Goroutines
+A goroutine has a simple model: it is a function executing concurrently with other goroutines in the same address space. It only require a little stack space, which are start small and grow by allocating heap storage as required.
+
+Goroutines are multiplexed onto multiple OS threads so if one should block, such as waiting for I/O, others continue to run. Their design hides many of the complexities of thread creation and management.
+
+Prefix a function or method call with the go keyword to run the call in a new goroutine. When the call completes, the goroutine exits. 
+```
+go list.Sort()  // run list.Sort concurrently; don't wait for it.
+```
 
 
 
@@ -73,5 +81,5 @@ Week two:
 
 
 [Reference]
-How to write Go code[https://golang.org/doc/code.html#Workspaces](https://golang.org/doc/code.html#Workspaces)
+How to write Go code[https://golang.org/doc/code.html#Workspaces](https://golang.org/doc/code.html#Workspaces) \
 Learn GO Concurrency [https://github.com/golang/go/wiki/LearnConcurrency](https://github.com/golang/go/wiki/LearnConcurrency)
