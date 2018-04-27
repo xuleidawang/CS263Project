@@ -26,6 +26,7 @@ func main() {
 
         for number := 1; number < 27; number++ {
             fmt.Printf("%d ", number)
+            sleep(200)
         }
     }()
 
