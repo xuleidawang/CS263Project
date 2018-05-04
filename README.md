@@ -144,6 +144,91 @@ By default sends and receives block until both the sender and receiver are ready
 
 
 
+## 3. Go statements
+A "go" statement starts the execution of a function call as an independent concurrent thread of control, or goroutine, within the same address space.
+
+```
+GoStmt = "go" Expression .
+```
+
+The expression must be a function or method call; it cannot be parenthesized. Calls of built-in functions are restricted as for expression statements.
+
+The function value and parameters are evaluated as usual in the calling goroutine, but unlike with a regular call, program execution does not wait for the invoked function to complete. Instead, the function begins executing independently in a new goroutine. When the function terminates, its goroutine also terminates. If the function has any return values, they are discarded when the function completes.
+
+```
+go Server()
+go func(ch chan<- bool) { for { sleep(10); ch <- true }} (c)
+```
+
+
+Select statements\
+A "select" statement chooses which of a set of possible send or receive operations will proceed. It looks similar to a "switch" statement but with the cases all referring to communication operations.
+```
+SelectStmt = "select" "{" { CommClause } "}" .
+CommClause = CommCase ":" StatementList .
+CommCase   = "case" ( SendStmt | RecvStmt ) | "default" .
+RecvStmt   = [ ExpressionList "=" | IdentifierList ":=" ] RecvExpr .
+RecvExpr   = Expression .
+```
+A case with a RecvStmt may assign the result of a RecvExpr to one or two variables, which may be declared using a short variable declaration. The RecvExpr must be a (possibly parenthesized) receive operation. There can be at most one default case and it may appear anywhere in the list of cases.
+
+Execution of a "select" statement proceeds in several steps:
+
+1. For all the cases in the statement, the channel operands of receive operations and the channel and right-hand-side expressions of send statements are evaluated exactly once, in source order, upon entering the "select" statement. The result is a set of channels to receive from or send to, and the corresponding values to send. Any side effects in that evaluation will occur irrespective of which (if any) communication operation is selected to proceed. Expressions on the left-hand side of a RecvStmt with a short variable declaration or assignment are not yet evaluated.
+2. If one or more of the communications can proceed, a single one that can proceed is chosen via a uniform pseudo-random selection. Otherwise, if there is a default case, that case is chosen. If there is no default case, the "select" statement blocks until at least one of the communications can proceed.
+3. Unless the selected case is the default case, the respective communication operation is executed.
+4. If the selected case is a RecvStmt with a short variable declaration or an assignment, the left-hand side expressions are evaluated and the received value (or values) are assigned.
+5. The statement list of the selected case is executed.
+
+Since communication on nil channels can never proceed, a select with only nil channels and no default case blocks forever.
+
+```
+var a []int
+var c, c1, c2, c3, c4 chan int
+var i1, i2 int
+select {
+case i1 = <-c1:
+    print("received ", i1, " from c1\n")
+case c2 <- i2:
+    print("sent ", i2, " to c2\n")
+case i3, ok := (<-c3):  // same as: i3, ok := <-c3
+    if ok {
+        print("received ", i3, " from c3\n")
+    } else {
+        print("c3 is closed\n")
+    }
+case a[f()] = <-c4:
+    // same as:
+    // case t := <-c4
+    //  a[f()] = t
+default:
+    print("no communication\n")
+}
+
+for {  // send random sequence of bits to c
+    select {
+    case c <- 0:  // note: no statement, no fallthrough, no folding of cases
+    case c <- 1:
+    }
+}
+
+select {}  // block forever
+```
+
+Return statements\
+A "return" statement in a function F terminates the execution of F, and optionally provides one or more result values. Any functions deferred by F are executed before F returns to its caller.
+```
+ReturnStmt = "return" [ ExpressionList ] .
+```
+In a function without a result type, a "return" statement must not specify any result values.
+```
+func noResult() {
+    return
+}
+```
+
+
+
 Week one:  
 We implemented a simple go program that run two print function concurrently. We built a funtion that print digits and one print alphabets. Using runtime.GOMAXPROCS(2), we are able to see that both function print chars concurrently and each time the print value is not the same.   
 Concept learned:  
