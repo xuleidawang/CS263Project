@@ -58,7 +58,6 @@ src/
 	    writer.go              # package source
     ... (many more repositories and packages omitted) ...
 ```
-\
 
 ## 2. Overview
 (1) Concurrency Overview
@@ -135,6 +134,13 @@ func Serve(queue chan *Request) {
     }
 }
 ```
+
+
+See the sample program channels.go 
+Send a value into a channel using the channel <- syntax. Here we send "ping" to the messages channel we made above, from a new goroutine.
+The <-channel syntax receives a value from the channel. Here we’ll receive the "ping" message we sent above and print it out.
+When we run the program the "ping" message is successfully passed from one goroutine to another via our channel.
+By default sends and receives block until both the sender and receiver are ready. This property allowed us to wait at the end of our program for the "ping" message without having to use any other synchronization.
 
 
 
