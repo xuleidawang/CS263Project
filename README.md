@@ -84,9 +84,33 @@ Rough analogy: writing to a file by name(process, Erlang) vs. writing to a file 
 
 
 (2) Goroutines
+A Goroutine is a lightweight thread managed by the Go runtime.
 A goroutine has a simple model: it is a function executing concurrently with other goroutines in the same address space. It only require a little stack space, which are start small and grow by allocating heap storage as required.
 
 Goroutines are multiplexed onto multiple OS threads so if one should block, such as waiting for I/O, others continue to run. Their design hides many of the complexities of thread creation and management.
+
+```
+package main
+
+import (
+    "fmt"
+    "time"
+)
+
+func say(s string) {
+    for i := 0; i < 5; i++ {
+        time.Sleep(100 * time.Millisecond)
+        fmt.Println(s)
+    }
+}
+
+func main() {
+    go say("world")
+    say("hello")
+}
+
+```
+
 
 Prefix a function or method call with the go keyword to run the call in a new goroutine. When the call completes, the goroutine exits. 
 ```
@@ -103,6 +127,7 @@ func Announce(message string, delay time.Duration) {
     }()  // Note the parentheses - must call the function.
 }
 ```
+Goroutines run inthe same address space, so access to shared memory must be synchronized. The sync package provides useful primitives.
 
 In Go, function literals are closures: the implementation makes sure the variables referred to by the function survive as long as they are active.
 These examples aren't too practical because the functions have no way of signaling completion. For that, we need channels.
@@ -116,7 +141,6 @@ chan T          // can be used to send and receive values of type T
 chan<- float64  // can only be used to send float64s
 <-chan int      // can only be used to receive ints
 ```
-
 
 Like maps, channels are allocated with keyword *make*, and the resulting value acts as a reference to an underlying data structure. If an optional integer parameter is provided, it sets the buffer size for the channel. The default is zero, for an unbuffered or synchronous channel.
 
