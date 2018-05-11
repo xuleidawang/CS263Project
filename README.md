@@ -65,6 +65,24 @@ src/
 In computer science, concurrency refers to the ability of different parts or units of a program, algorithm, or problem to be executed out-of-order or in partial order, without affecting the final outcome. This allows for parallel execution of the concurrent units, which can significantly improve overall speed of the execution in multi-processor and multicore system. 
 In many other programming languages, concurrent is made difficult by the subtleties required to implement correct access to shared variables. However, Go encouraged a different approach by passing the shared variable on channels and never actively shared by separate thread of execution. Only one goroutine has access to the value at any given time. 
 
+The concurrency features of Go seemed new.
+But they are tooted in a long history, reaching back to Hoare's CSP in 1978 and even Dijkstra's guarded commands(1975).
+
+Programming languages with similar features:
+- Occam (May, 1983)
+- Erlang (Armstrong, 1986)
+- Newsqueak (Pike, 1988)
+- Concurrent ML (Reppy, 1993)
+- Alef (Winterbottom, 1995)
+- Limbo (Doewaed, Pike Winterbottom, 1996)
+
+Distinction\
+Go is the latest on the Newsqueak-Alef-Limbo branch, distinguished by first-class channels.\
+Erlang is closer to original CSP, where we communicate to a process by name rather than over a channel.\
+The models are equivalent but express things differently.\
+Rough analogy: writing to a file by name(process, Erlang) vs. writing to a file descriptor(channel, Go).
+
+
 (2) Goroutines
 A goroutine has a simple model: it is a function executing concurrently with other goroutines in the same address space. It only require a little stack space, which are start small and grow by allocating heap storage as required.
 
@@ -90,6 +108,16 @@ In Go, function literals are closures: the implementation makes sure the variabl
 These examples aren't too practical because the functions have no way of signaling completion. For that, we need channels.
 
 (3) Channels
+A channel provides a mechanism for concurrently executing functions to communicate by sending and receiving values of a specified element type. The value of an uninitialized channel is nil.\
+
+The optional <- operator specifies the channel direction, send or receive. If no direction is given, the channel is bidirectional. A channel may be constrained only to send or only to receive by conversion or assignment.
+```
+chan T          // can be used to send and receive values of type T
+chan<- float64  // can only be used to send float64s
+<-chan int      // can only be used to receive ints
+```
+
+
 Like maps, channels are allocated with keyword *make*, and the resulting value acts as a reference to an underlying data structure. If an optional integer parameter is provided, it sets the buffer size for the channel. The default is zero, for an unbuffered or synchronous channel.
 
 ```
@@ -223,6 +251,40 @@ ReturnStmt = "return" [ ExpressionList ] .
 In a function without a result type, a "return" statement must not specify any result values.
 ```
 func noResult() {
+    return
+}
+```
+
+There are three ways to return values from a function with a result type:
+
+1. The return value or values may be explicitly listed in the "return" statement. Each expression must be single-valued and assignable to the corresponding element of the function's result type.
+```
+func simpleF() int {
+    return 2
+}
+
+func complexF1() (re float64, im float64) {
+    return -7.0, -4.0
+}
+```
+2. The expression list in the "return" statement may be a single call to a multi-valued function. The effect is as if each value returned from that function were assigned to a temporary variable with the type of the respective value, followed by a "return" statement listing these variables, at which point the rules of the previous case apply.
+
+```
+func complexF2() (re float64, im float64) {
+    return complexF1()
+}
+```
+
+3. The expression list may be empty if the function's result type specifies names for its result parameters. The result parameters act as ordinary local variables and the function may assign values to them as necessary. The "return" statement returns the values of these variables.
+```
+func complexF3() (re float64, im float64) {
+    re = 7.0
+    im = 4.0
+    return
+}
+
+func (devnull) Write(p []byte) (n int, _ error) {
+    n = len(p)
     return
 }
 ```
