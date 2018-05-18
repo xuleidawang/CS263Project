@@ -313,8 +313,6 @@ func (devnull) Write(p []byte) (n int, _ error) {
 }
 ```
 
-## 4. Concurrency features in GO
-
 - Why is concurrency supported?
 interaction environment. 
 Writing a program deal with real world.
@@ -337,12 +335,23 @@ CSP paper
 - What is it good for?
 - How do we use it ? 
 
+## 4. Concurrency features in GO and Java
+To analyze concurrency features, we implement simple matrix multiplication programs in both Go and Java. Java implementation uses Java Thread, and Go implementation uses Goroutine and Channel. From the experiment, Go derived better performance than Java in both compile time and concurrency. Moreover, Go code shows the ease of concurrent programming. Go is still young, but we are convinced that Go will become the mainstream.
+
+The Java Programming Language was released by Sun Microsystems in 1995. It is a concurrent, object-oriented, and garbage-collected programming language, which is widely used for several areas of application. Java has built-in support for concurrency: the Thread class, Runnable interface, and java.util.concurrent concurrent package. They provide powerful features for multi-thread programming.
+
+In this section, we focus on concurrency feature, which is the one of common features of Go and Java. The purpose of this project is to analyze the performance of Go and compare it with Java on two aspects: compile time and the concurrency feature. To analyze the performance, we prepare simple matrix multiplication programs, implemented in Go and Java.
+
+Tang presented two multi-core parallel programs in Go in order to show the ease of multi-core parallel programming using Go. Implementations of benchmarks are parallel integration and parallel dynamic programming. He also measured performance of Go with shifting the number of cores used. He concludes that it is easy to write multi-core programs in Go, and the highest speed of benchmarks are derived on an octal-core AMD chip.
+
+### Method
+This section explains the methods for performance comparison. Matrix multiplication is often used for performance evaluation of programming languages as shown in [5], [6], and [7]. In this experiment, we use simple matrix multiplication that is calculated by C=AB. To simplify the problem, we define two matrices that have same length of row and column. First, we divide matrix A into some processes, and calculate the product of a part of A and matrix B. After completion of all calculation, we combine them. Figure 1 illustrates the part of calculation of matrix C.
+All the measurements were performed on the same machine. Details of the hardware and software are given below:
 
 
+fig
 
-
-
-
+The benchmarks are implementations of simple matrix multiplication in both Go and Java. In order to measure performance, we prepare four benchmark sources: matrix.go, parallel_matrix.go, Matrix.java and ParallelMatrix.java.
 
 
 
