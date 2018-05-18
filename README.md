@@ -313,6 +313,37 @@ func (devnull) Write(p []byte) (n int, _ error) {
 }
 ```
 
+## 4. Concurrency features in GO
+
+- Why is concurrency supported?
+interaction environment. 
+Writing a program deal with real world.
+Concurrency is the composition of independently executing computations.
+Concurrency is a way to structure software, particularly as a way to write clean code that interacts well with the real world.
+
+Not parallelism.
+One processor can still be concurrent but cannot be parallel.
+
+A model for software construction
+Easy to understande.
+Easy to use.
+Easy to reason about.
+
+CSP paper 
+
+
+- What is concurrecny, anyway?
+- Where does the idea come from?
+- What is it good for?
+- How do we use it ? 
+
+
+
+
+
+
+
+
 
 
 Week one:  
