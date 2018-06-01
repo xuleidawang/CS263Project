@@ -1,0 +1,36 @@
+Filename: matrix_multiply.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+    24  79.3281250000 MiB  79.3281250000 MiB   @profile(precision=precision, stream=fp)
+    25                             def pardot(a, b, nblocks, mblocks, dot_func=do_dot):
+    26                                 """
+    27                                 Return the matrix product a * b.
+    28                                 The product is split into nblocks * mblocks partitions that are performed
+    29                                 in parallel threads.
+    30                                 """
+    31  79.3320312500 MiB   0.0039062500 MiB       n_jobs = nblocks * mblocks
+    32  79.3398437500 MiB   0.0078125000 MiB       print('running {} jobs in parallel'.format(n_jobs))
+    33                             
+    34  79.3398437500 MiB   0.0000000000 MiB       out = np.empty((a.shape[0], b.shape[1]), dtype=a.dtype)
+    35                             
+    36  79.3476562500 MiB   0.0078125000 MiB       out_blocks = blockshaped(out, nblocks, mblocks)
+    37  79.3476562500 MiB   0.0000000000 MiB       a_blocks = blockshaped(a, nblocks, 1)
+    38  79.3476562500 MiB   0.0000000000 MiB       b_blocks = blockshaped(b, 1, mblocks)
+    39                             
+    40  79.3476562500 MiB   0.0000000000 MiB       threads = []
+    41  79.8593750000 MiB   0.0000000000 MiB       for i in range(nblocks):
+    42  79.8593750000 MiB   0.0000000000 MiB           for j in range(mblocks):
+    43  79.8359375000 MiB   0.0000000000 MiB               th = threading.Thread(target=dot_func, 
+    44  79.8359375000 MiB   0.0078125000 MiB                                     args=(a_blocks[i, 0, :, :], 
+    45  79.8359375000 MiB   0.0000000000 MiB                                           b_blocks[0, j, :, :], 
+    46  79.8359375000 MiB   0.0078125000 MiB                                           out_blocks[i, j, :, :]))
+    47  79.8593750000 MiB   0.4960937500 MiB               th.start()
+    48  79.8593750000 MiB   0.0000000000 MiB               threads.append(th)
+    49                             
+    50  96.6484375000 MiB -12.8632812500 MiB       for th in threads:
+    51  96.6484375000 MiB   3.9257812500 MiB           th.join()
+    52                             
+    53  95.2421875000 MiB  -1.4062500000 MiB       return out
+
+
